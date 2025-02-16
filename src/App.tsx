@@ -1,5 +1,5 @@
 import './App.css';
-import AlbumList from "./AlbumList";
+import AlbumList from "./components/AlbumList";
 
 function App() {
   return (

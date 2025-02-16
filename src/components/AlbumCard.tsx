@@ -1,36 +1,36 @@
+import React from 'react';
+
 import { DisplayedAlbum } from "../types";
+
+import { BREAKPOINTS, ITUNES_API } from '../constants';
 
 export default function AlbumCard({ id, albumTitle, artistName, image, link }: DisplayedAlbum) {
   return (
-    <div
-      key={id}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}
-    >
+    <div className="album-card">
       {image && (
-        <img
-          src={image}
-          alt={albumTitle}
-          width={170}
-          height={170}
-          style={{
-            borderRadius: '10px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            marginBottom: '10px',
-          }}
-        />
+        <picture>
+          <source
+            media={`(max-width: ${BREAKPOINTS.MOBILE}`}
+            srcSet={image.replace(`${ITUNES_API.IMAGE_SIZES.LARGE}`, `${ITUNES_API.IMAGE_SIZES.SMALL}`)}
+          />
+          <source
+            media={`(max-width: ${BREAKPOINTS.TABLET}`}
+            srcSet={image.replace(`${ITUNES_API.IMAGE_SIZES.LARGE}`, `${ITUNES_API.IMAGE_SIZES.MEDIUM}`)}
+          />
+          <img
+            className="album-image"
+            src={image}
+            alt={albumTitle}
+            loading="lazy"
+          />
+        </picture>
       )}
-      <h3 style={{ fontSize: '14px', margin: '5px 0' }}>{albumTitle}</h3>
-      <p style={{ fontSize: '12px', color: '#666', margin: '2px 0' }}>{artistName}</p>
-      <a
+      <h3 className="album-title">{albumTitle}</h3>
+      <p className="album-artist">{artistName}</p>
+      <a className="album-link"
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ fontSize: '12px', color: '#007bff', textDecoration: 'none' }}
       >
         View on iTunes
       </a>
