@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Album, DisplayedAlbum } from "../types";
 import AlbumCard from './AlbumCard';
 import { BREAKPOINTS, DEFAULTS, GRID, ITUNES_API } from '../constants';
+import SearchBar from './SearchBar';
+import { SortOption } from './SortDropdown';
 
 export const getItemsPerPage = (): number => {
   const isCompactMobile = window.matchMedia(`(max-width: ${BREAKPOINTS.COMPACT_MOBILE}px)`).matches;
@@ -24,8 +26,52 @@ export const getItemsPerPage = (): number => {
 
 export default function AlbumList() {
   const [albums, setAlbums] = useState<DisplayedAlbum[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [filteredAlbums, setFilteredAlbums] = useState<DisplayedAlbum[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const itemsPerPage = getItemsPerPage();
+  const [sortOption, setSortOption] = useState<SortOption>('album');
+
+  useEffect(() => {
+    const sortAlbums = (albums: DisplayedAlbum[]) => {
+      const sorted = [...albums];
+      switch (sortOption) {
+        case 'artist':
+          sorted.sort((a, b) => a.artistName.localeCompare(b.artistName));
+          break;
+        case 'album':
+          sorted.sort((a, b) => a.albumTitle.localeCompare(b.albumTitle));
+          break;
+        case 'date':
+          sorted.sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime());
+          break;
+      }
+      return sorted;
+    };
+
+    const filtered = searchQuery.trim() === ''
+      ? albums
+      : albums.filter(album =>
+        album.albumTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        album.artistName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+    setFilteredAlbums(sortAlbums(filtered));
+  }, [searchQuery, albums, sortOption]);
+
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredAlbums(albums);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const filtered = albums.filter(album =>
+        album.albumTitle.toLowerCase().includes(query) ||
+        album.artistName.toLowerCase().includes(query)
+      );
+      setFilteredAlbums(filtered);
+    }
+    setCurrentPage(1);
+  }, [searchQuery, albums]);
 
   useEffect(() => {
     const getAlbums = async () => {
@@ -43,6 +89,7 @@ export default function AlbumList() {
             ? album['im:image'].at(-1)?.label
             : undefined;
           const link = album?.link?.attributes?.href || DEFAULTS.FALLBACK_LINK;
+          const releaseDate = album?.['im:releaseDate']?.label || DEFAULTS.UNKNOWN_DATE;
 
           return (
             {
@@ -50,25 +97,40 @@ export default function AlbumList() {
               albumTitle,
               artistName,
               image,
-              link
+              link,
+              releaseDate
             }
           );
         })
 
-        setAlbums(albums);
+        // the default value for Sort is 'album'
+        const sortedAlbums = [...albums].sort((a, b) =>
+          a.albumTitle.localeCompare(b.albumTitle)
+        );
+
+        setAlbums(sortedAlbums);
       }
     };
 
     getAlbums();
   }, []);
 
-  const totalPages = Math.ceil(albums.length / itemsPerPage);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleSort = (option: SortOption) => {
+    setSortOption(option);
+  };
+
+  const totalPages = Math.ceil(filteredAlbums.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentAlbums = albums.slice(indexOfFirstItem, indexOfLastItem);
+  const currentAlbums = filteredAlbums.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <>
+    <div className="album-list-container">
+      <SearchBar onSearch={handleSearch} onSort={handleSort} />
       <div className="album-grid">
         {currentAlbums.map((album: DisplayedAlbum) => (
           <AlbumCard {...album} />
@@ -82,11 +144,9 @@ export default function AlbumList() {
         >
           Previous
         </button>
-
         <span className="page-info">
           Page {currentPage} of {totalPages}
         </span>
-
         <button
           onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
@@ -95,6 +155,6 @@ export default function AlbumList() {
           Next
         </button>
       </div>
-    </>
+    </div>
   );
 }

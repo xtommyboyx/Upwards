@@ -1,17 +1,56 @@
-.App {
-  text-align: center;
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-/* Clear out default styles and keep only what we need */
+.App {
+  text-align: center;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 .album-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 20px;
-  justify-content: center;
   width: 100%;
-  padding: 20px;
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {  /* Tablet */
+  .album-grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 480px) {  /* Larger phones */
+  .album-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 414px) {  /* iPhone XR */
+  .album-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 380px;
+  }
+}
+
+@media (max-width: 375px) {  /* iPhone SE */
+  .album-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-width: 320px;
+  }
 }
 
 .album-card {
@@ -19,7 +58,6 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 10px;
   width: 100%;
 }
 
@@ -31,7 +69,6 @@
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
-  transition: transform 0.3s ease-out;
 }
 
 .album-image:hover {
@@ -41,14 +78,14 @@
 .album-title {
   font-size: clamp(12px, 2vw, 14px);
   margin: 5px 0;
-  word-break: break-word;
+  width: 100%;
 }
 
 .album-artist {
   font-size: clamp(10px, 1.8vw, 12px);
   color: #666;
   margin: 2px 0;
-  word-break: break-word;
+  width: 100%;
 }
 
 .album-link {
@@ -59,4 +96,137 @@
 
 .album-link:hover {
   text-decoration: underline;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.pagination-button {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pagination-button:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination-button:not(:disabled):hover {
+  background-color: #f0f0f0;
+}
+
+.page-info {
+  font-size: 14px;
+  color: #666;
+}
+
+@media (max-width: 480px) {
+  .album-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .pagination {
+    gap: 10px;
+  }
+
+  .pagination-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
+
+.album-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.search-controls {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.sort-dropdown {
+  padding: 12px 35px 12px 20px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  background-color: white;
+  cursor: pointer;
+  min-width: 140px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+}
+
+.sort-dropdown:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+@media (max-width: 480px) {
+  .search-container {
+    padding: 0 15px;
+  }
+
+  .search-input {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-input,
+  .sort-dropdown {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 14px;
+  }
 }

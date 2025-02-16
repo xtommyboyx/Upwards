@@ -9,6 +9,7 @@ export interface Album {
   "im:artist": { label: string };
   "im:image": Image[];
   link: { attributes: { href: string } };
+  "im:releaseDate": { label: string };
 }
 
 export interface DisplayedAlbum {
@@ -17,4 +18,5 @@ export interface DisplayedAlbum {
   artistName: string;
   image?: string;
   link: string;
+  releaseDate: string;
 }
