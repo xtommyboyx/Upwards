@@ -1,11 +1,11 @@
-import React from 'react';
-// import logo from './logo.svg';
 import './App.css';
+import AlbumList from "./AlbumList";
 
 function App() {
   return (
     <div className="App">
-      test 2
+      <h1>iTunes Top Albums</h1>
+      <AlbumList />
     </div>
   );
 }
