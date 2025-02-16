@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import {Album, DisplayedAlbum} from "./types";
+import { Album, DisplayedAlbum } from "../types";
+import AlbumCard from './AlbumCard';
 
 export default function AlbumList() {
   const [albums, setAlbums] = useState<DisplayedAlbum[]>([]);
@@ -31,8 +32,6 @@ export default function AlbumList() {
           );
         })
 
-        console.log(albums);
-
         setAlbums(albums);
       }
     };
@@ -52,39 +51,7 @@ export default function AlbumList() {
         }}
       >
         {albums.map((album: DisplayedAlbum) => (
-          <div
-            key={album.id}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'center',
-            }}
-          >
-            {album.image && (
-              <img
-                src={album.image}
-                alt={album.albumTitle}
-                width={170}
-                height={170}
-                style={{
-                  borderRadius: '10px',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                  marginBottom: '10px',
-                }}
-              />
-            )}
-            <h3 style={{ fontSize: '14px', margin: '5px 0' }}>{album.albumTitle}</h3>
-            <p style={{ fontSize: '12px', color: '#666', margin: '2px 0' }}>{album.artistName}</p>
-            <a
-              href={album.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontSize: '12px', color: '#007bff', textDecoration: 'none' }}
-            >
-              View on iTunes
-            </a>
-          </div>
+          <AlbumCard {...album} />
         ))}
       </div>
     </div>
