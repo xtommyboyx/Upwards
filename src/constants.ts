@@ -7,13 +7,33 @@ export const ITUNES_API = {
   }
 };
 
-export const BREAKPOINTS = {
-  MOBILE: '480px',
-  TABLET: '768px'
-};
-
 export const DEFAULTS = {
   UNKNOWN_ALBUM: 'Unknown Album',
   UNKNOWN_ARTIST: 'Unknown Artist',
   FALLBACK_LINK: '#'
+};
+
+export const BREAKPOINTS = {
+  COMPACT_MOBILE: 375,
+  MOBILE: 414,
+  LARGER_MOBILE: 480,
+  TABLET: 768,
+  DESKTOP: 1200
+};
+
+export const GRID = {
+  COLUMNS: {
+    COMPACT_MOBILE: 2,
+    MOBILE: 2,
+    LARGER_MOBILE: 3,
+    TABLET: 4,
+    DESKTOP: 6
+  },
+  ROWS: {
+    COMPACT_MOBILE: 3,
+    MOBILE: 5,
+    LARGER_MOBILE: 3,
+    TABLET: 3,
+    DESKTOP: 2
+  }
 };

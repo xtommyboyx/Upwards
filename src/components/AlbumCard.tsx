@@ -10,11 +10,11 @@ export default function AlbumCard({ id, albumTitle, artistName, image, link }: D
       {image && (
         <picture>
           <source
-            media={`(max-width: ${BREAKPOINTS.MOBILE}`}
+            media={`(max-width: ${BREAKPOINTS.MOBILE}px`}
             srcSet={image.replace(`${ITUNES_API.IMAGE_SIZES.LARGE}`, `${ITUNES_API.IMAGE_SIZES.SMALL}`)}
           />
           <source
-            media={`(max-width: ${BREAKPOINTS.TABLET}`}
+            media={`(max-width: ${BREAKPOINTS.TABLET}px`}
             srcSet={image.replace(`${ITUNES_API.IMAGE_SIZES.LARGE}`, `${ITUNES_API.IMAGE_SIZES.MEDIUM}`)}
           />
           <img
