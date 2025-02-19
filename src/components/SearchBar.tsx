@@ -12,7 +12,7 @@ export default function SearchBar({ onSearch, onSort }: SearchBarProps) {
       <div className="search-controls">
         <input
           type="search"
-          placeholder="Search by album or artist..."
+          placeholder="Search by album, artist, genre or release year"
           onChange={(e) => onSearch(e.target.value)}
           className="search-input"
         />

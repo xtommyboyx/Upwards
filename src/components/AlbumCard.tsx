@@ -4,9 +4,13 @@ import { DisplayedAlbum } from "../types";
 
 import { BREAKPOINTS, ITUNES_API } from '../constants';
 
-export default function AlbumCard({ id, albumTitle, artistName, image, link }: DisplayedAlbum) {
+interface AlbumCardProps extends DisplayedAlbum {
+  onClick: () => void;
+}
+
+export default function AlbumCard({ onClick, id, albumTitle, artistName, genre, image, link }: AlbumCardProps) {
   return (
-    <div className="album-card">
+    <div className="album-card" onClick={onClick}>
       {image && (
         <picture>
           <source
@@ -27,6 +31,7 @@ export default function AlbumCard({ id, albumTitle, artistName, image, link }: D
       )}
       <h3 className="album-title">{albumTitle}</h3>
       <p className="album-artist">{artistName}</p>
+      <p className="album-genre">{genre}</p>
       <a className="album-link"
         href={link}
         target="_blank"

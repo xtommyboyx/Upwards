@@ -4,6 +4,9 @@ import AlbumCard from './AlbumCard';
 import { BREAKPOINTS, DEFAULTS, GRID, ITUNES_API } from '../constants';
 import SearchBar from './SearchBar';
 import { SortOption } from './SortDropdown';
+import Modal from './Modal';
+import AlbumDetails from './AlbumDetails';
+import Pagination from './Pagination';
 
 export const getItemsPerPage = (): number => {
   const isCompactMobile = window.matchMedia(`(max-width: ${BREAKPOINTS.COMPACT_MOBILE}px)`).matches;
@@ -31,7 +34,9 @@ export default function AlbumList() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const itemsPerPage = getItemsPerPage();
   const [sortOption, setSortOption] = useState<SortOption>('album');
+  const [selectedAlbum, setSelectedAlbum] = useState<DisplayedAlbum | null>(null);
 
+  // Sort Albums
   useEffect(() => {
     const sortAlbums = (albums: DisplayedAlbum[]) => {
       const sorted = [...albums];
@@ -59,20 +64,29 @@ export default function AlbumList() {
     setFilteredAlbums(sortAlbums(filtered));
   }, [searchQuery, albums, sortOption]);
 
+  // Search Bar
   useEffect(() => {
     if (searchQuery.trim() === '') {
       setFilteredAlbums(albums);
     } else {
       const query = searchQuery.toLowerCase();
-      const filtered = albums.filter(album =>
-        album.albumTitle.toLowerCase().includes(query) ||
-        album.artistName.toLowerCase().includes(query)
-      );
+
+      const filtered = albums.filter(album => {
+        const releaseYear = album.releaseDate.split('-')?.[0];
+
+        return (
+          album.albumTitle.toLowerCase().includes(query) ||
+          album.artistName.toLowerCase().includes(query) ||
+          album.genre.toLowerCase().includes(query) ||
+          releaseYear.includes(query)
+        );
+      });
       setFilteredAlbums(filtered);
     }
     setCurrentPage(1);
   }, [searchQuery, albums]);
 
+  // Get data, transform into DisplayedAlbum type object array and save to state
   useEffect(() => {
     const getAlbums = async () => {
       const response = await fetch(`${ITUNES_API.BASE_URL}`);
@@ -81,7 +95,7 @@ export default function AlbumList() {
       // don't show any albums if we don't get the correct data back
       if (data?.feed?.entry) {
         const albums = data.feed.entry.map((album: Album) => {
-          const id = album?.id?.attributes?.["im:id"] || crypto.randomUUID();
+          const id = album?.id?.attributes?.['im:id'] || crypto.randomUUID();
           const albumTitle = album?.['im:name']?.label || DEFAULTS.UNKNOWN_ALBUM;
           const artistName = album?.['im:artist']?.label || DEFAULTS.UNKNOWN_ARTIST;
           // default to the largest sized image. for mobile and tablets this will be replaced in AlbumCard
@@ -90,6 +104,8 @@ export default function AlbumList() {
             : undefined;
           const link = album?.link?.attributes?.href || DEFAULTS.FALLBACK_LINK;
           const releaseDate = album?.['im:releaseDate']?.label || DEFAULTS.UNKNOWN_DATE;
+          const genre = album?.['category']?.attributes?.label || DEFAULTS.UNKNOWN_GENRE;
+          const price = album?.['im:price']?.label || DEFAULTS.UNKNOWN_PRICE;
 
           return (
             {
@@ -98,7 +114,9 @@ export default function AlbumList() {
               artistName,
               image,
               link,
-              releaseDate
+              releaseDate,
+              genre,
+              price
             }
           );
         })
@@ -133,28 +151,23 @@ export default function AlbumList() {
       <SearchBar onSearch={handleSearch} onSort={handleSort} />
       <div className="album-grid">
         {currentAlbums.map((album: DisplayedAlbum) => (
-          <AlbumCard {...album} />
+          <AlbumCard
+            {...album}
+            key={album.id}
+            onClick={() => setSelectedAlbum(album)}
+          />
         ))}
       </div>
-      <div className="pagination">
-        <button
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="pagination-button"
-        >
-          Previous
-        </button>
-        <span className="page-info">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className="pagination-button"
-        >
-          Next
-        </button>
-      </div>
+      {filteredAlbums.length > itemsPerPage && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+      <Modal isOpen={!!selectedAlbum} onClose={() => setSelectedAlbum(null)}>
+        {selectedAlbum && <AlbumDetails album={selectedAlbum} />}
+      </Modal>
     </div>
   );
 }

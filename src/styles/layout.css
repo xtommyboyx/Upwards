@@ -1,0 +1,50 @@
+.album-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {  /* Tablet */
+    .album-grid {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 700px;
+    }
+}
+
+@media (max-width: 480px) {  /* Larger phones */
+    .album-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        max-width: 450px;
+    }
+}
+
+@media (max-width: 414px) {  /* iPhone XR */
+    .album-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        max-width: 380px;
+    }
+}
+
+@media (max-width: 375px) {  /* iPhone SE */
+    .album-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        max-width: 320px;
+    }
+}

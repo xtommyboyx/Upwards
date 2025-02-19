@@ -4,12 +4,14 @@ interface Image {
 }
 
 export interface Album {
-  id: { attributes: { "im:id": string } };
-  "im:name": { label: string };
-  "im:artist": { label: string };
-  "im:image": Image[];
+  id: { attributes: { 'im:id': string } };
+  'im:name': { label: string };
+  'im:artist': { label: string };
+  'im:image': Image[];
   link: { attributes: { href: string } };
-  "im:releaseDate": { label: string };
+  'im:releaseDate': { label: string };
+  category: { attributes: { 'label': string } };
+  'im:price': { label: string };
 }
 
 export interface DisplayedAlbum {
@@ -19,4 +21,6 @@ export interface DisplayedAlbum {
   image?: string;
   link: string;
   releaseDate: string;
+  genre: string;
+  price: string;
 }

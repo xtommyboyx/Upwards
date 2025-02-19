@@ -11,6 +11,8 @@ export const DEFAULTS = {
   UNKNOWN_ALBUM: 'Unknown Album',
   UNKNOWN_ARTIST: 'Unknown Artist',
   UNKNOWN_DATE: '1900-01-01T00:00:00-07:00', // old date to ensure it appears at the end when sorting
+  UNKNOWN_GENRE: 'Unknown Genre',
+  UNKNOWN_PRICE: 'Unknown Price',
   FALLBACK_LINK: '#'
 };
 
