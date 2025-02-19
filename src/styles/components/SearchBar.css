@@ -49,7 +49,7 @@
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .search-container {
         padding: 0 15px;
     }
@@ -57,12 +57,15 @@
     .search-controls {
         flex-direction: column;
         gap: 10px;
+        width: 100%;
     }
 
     .search-input,
     .sort-dropdown {
         width: 100%;
+        max-width: 100%;
         padding: 10px 15px;
         font-size: 14px;
+        box-sizing: border-box;
     }
 }
